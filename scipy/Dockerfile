@@ -1,10 +1,9 @@
-FROM ruimashita/pip
+FROM ruimashita/numpy
 
 MAINTAINER takuya.wakisaka@moldweorp.com
 
 # install scipy
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    python-numpy \
     libatlas-base-dev \
     gfortran \
     && apt-get clean \
