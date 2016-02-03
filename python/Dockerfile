@@ -8,7 +8,7 @@ deb mirror://mirrors.ubuntu.com/mirrors.txt trusty-updates main restricted unive
 deb mirror://mirrors.ubuntu.com/mirrors.txt trusty-backports main restricted universe multiverse \n\
 deb mirror://mirrors.ubuntu.com/mirrors.txt trusty-security main restricted universe multiverse" > /etc/apt/sources.list
 
-# intall python and build tools
+# intall python 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     python \
     python-dev \
