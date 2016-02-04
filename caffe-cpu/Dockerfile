@@ -7,7 +7,7 @@ ENV PATH $PATH:/opt/caffe/.build_release/tools
 ENV CAFFE_VERSION=master
 WORKDIR /opt/caffe
 
-RUN apt-get update && apt-get install -y \
+RUN apt-get update && apt-get install -y --no-install-recommends \
   # for caffe
   libprotobuf-dev \
   libleveldb-dev \
