@@ -3,7 +3,7 @@ FROM ruimashita/python
 MAINTAINER takuya.wakisaka@moldweorp.com
 
 # install pip
-RUN wget https://bootstrap.pypa.io/get-pip.py && python get-pip.py
+RUN wget https://bootstrap.pypa.io/get-pip.py && python get-pip.py && rm get-pip.py
 
 # Fix: InsecurePlatformWarning
 # http://urllib3.readthedocs.org/en/latest/security.html#insecureplatformwarning
