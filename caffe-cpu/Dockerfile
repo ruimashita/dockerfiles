@@ -44,6 +44,7 @@ RUN cp Makefile.config.example Makefile.config && \
     # Build Caffe python
     make -j"$(nproc)" pycaffe
 
-# test + run tests
+# test + run tests + pytest
 RUN make -j"$(nproc)" test
 RUN make -j"$(nproc)" runtest
+RUN make -j"$(nproc)" pytest
