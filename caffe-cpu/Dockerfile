@@ -42,9 +42,13 @@ RUN cd /opt && git clone https://github.com/BVLC/caffe.git && cd caffe && git ch
     for req in $(cat python/requirements.txt); do pip install $req; done && \
 
     # Build Caffe python
-    make -j"$(nproc)" pycaffe
+    make -j"$(nproc)" pycaffe && \
 
-# test + run tests + pytest
-RUN make -j"$(nproc)" test
-RUN make -j"$(nproc)" runtest
-RUN make -j"$(nproc)" pytest
+    # test
+    make -j"$(nproc)" test && \
+
+    # run test
+    make -j"$(nproc)" runtest && \
+
+    # pytest
+    make -j"$(nproc)" pytest
