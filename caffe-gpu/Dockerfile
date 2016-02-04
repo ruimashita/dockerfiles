@@ -34,12 +34,14 @@ RUN cd /opt && git clone https://github.com/BVLC/caffe.git && cd caffe &&  git c
 
 WORKDIR /opt/caffe
 
-# Build Caffe core
-RUN cp Makefile.config.example Makefile.config && \
-  make -j"$(nproc)" all
-
 # Install python deps
 RUN for req in $(cat python/requirements.txt); do pip install $req; done
+
+# Build Caffe core
+RUN cp Makefile.config.example Makefile.config && \
+    echo "DEBUG := 1"  >> Makefile.config && \
+    echo "PYTHON_INCLUDE := /usr/include/python2.7 /usr/local/lib/python2.7/dist-packages/numpy/core/include"  >> Makefile.config && \
+    make -j"$(nproc)" all
 
 # Build Caffe python
 RUN make -j"$(nproc)" pycaffe
