@@ -38,7 +38,7 @@ RUN cd /opt && git clone https://github.com/BVLC/caffe.git && cd caffe && git ch
     make -j"$(nproc)" all && \
 
     # Install python requirements
-    for req in $(cat python/requirements.txt); do pip install $req; done && \
+    for req in $(cat python/requirements.txt); do pip install --no-cache-dir $req; done && \
 
     # Build Caffe python
     make -j"$(nproc)" pycaffe && \

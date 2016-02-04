@@ -8,4 +8,4 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     gfortran \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/ \
-    && pip install scipy
+    && pip install --no-cache-dir scipy

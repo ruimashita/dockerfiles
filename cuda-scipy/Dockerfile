@@ -20,11 +20,11 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libssl-dev \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/ \
-    && pip install ndg-httpsclient
+    && pip install --no-cache-dir ndg-httpsclient
 
 
 # install numpy
-RUN pip install numpy
+RUN pip install --no-cache-dir numpy
 
 
 # install scipy
@@ -33,4 +33,4 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     gfortran \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/ \
-    && pip install scipy
+    && pip install --no-cache-dir scipy
