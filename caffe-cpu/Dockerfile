@@ -52,3 +52,7 @@ RUN cd /opt && git clone https://github.com/BVLC/caffe.git && cd caffe && git ch
 
     # pytest
     make -j"$(nproc)" pytest
+
+
+# for bug "libdc1394 error: Failed to initialize libdc1394"
+# RUN ln /dev/null /dev/raw1394
