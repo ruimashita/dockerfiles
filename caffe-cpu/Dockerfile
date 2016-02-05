@@ -4,7 +4,7 @@ MAINTAINER takuya.wakisaka@moldweorp.com
 
 ENV PYTHONPATH /opt/caffe/python
 ENV PATH $PATH:/opt/caffe/.build_release/tools
-ENV CAFFE_VERSION=master
+ENV CAFFE_VERSION=tags/rc2
 WORKDIR /opt/caffe
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -54,7 +54,7 @@ RUN cd /opt && git clone https://github.com/BVLC/caffe.git && cd caffe && git ch
     make -j"$(nproc)" runtest && \
 
     # pytest
-    make -j"$(nproc)" pytest
+    # make -j"$(nproc)" pytest
 
 
 # for bug "libdc1394 error: Failed to initialize libdc1394"
