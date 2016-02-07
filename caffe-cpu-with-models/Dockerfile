@@ -1,4 +1,4 @@
-FROM ruimashita/caffe-cpu
+FROM ruimashita/caffe-cpu:rc3
 
 # ignore sha1 download model script
 ADD download_model_binary_ignore_sha1.py scripts/download_model_binary_ignore_sha1.py
