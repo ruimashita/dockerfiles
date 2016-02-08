@@ -51,7 +51,7 @@ RUN cd /opt && git clone https://github.com/BVLC/caffe.git && cd caffe && git ch
     make -j"$(nproc)" test && \
 
     # run test
-    make -j"$(nproc)" runtest && \
+    make -j"$(nproc)" runtest
 
     # pytest
     # make -j"$(nproc)" pytest
