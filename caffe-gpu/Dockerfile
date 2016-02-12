@@ -24,6 +24,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   # for /opt/caffe/python/draw_net.py
   python-pydot \
 
+  # for /opt/caffe/scripts/download_model_from_gist.sh
+  unzip \
+  
   && apt-get clean \
   && rm -rf /var/lib/apt/lists/
 
