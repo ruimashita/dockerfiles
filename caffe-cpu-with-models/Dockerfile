@@ -35,7 +35,7 @@ RUN ./scripts/download_model_from_gist.sh 211839e770f7b538e2d8 \
 ###
 
 # download ilsvrc12 data
-# RUN cd data/ilsvrc12 && ./get_ilsvrc_aux.sh
+RUN cd data/ilsvrc12 && ./get_ilsvrc_aux.sh
 
 # download flickr_style data
 # RUN python examples/finetune_flickr_style/assemble_data.py --workers=-1 --images=2000 --seed=831486
