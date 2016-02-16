@@ -9,6 +9,7 @@ WORKDIR /opt/caffe
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
   # for caffe
+  bc \
   libprotobuf-dev \
   libleveldb-dev \
   libsnappy-dev \
