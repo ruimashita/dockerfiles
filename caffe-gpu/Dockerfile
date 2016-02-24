@@ -36,6 +36,7 @@ RUN cd /opt && git clone https://github.com/BVLC/caffe.git && cd caffe && git ch
 
     cp Makefile.config.example Makefile.config && \
     echo "DEBUG := 1"  >> Makefile.config && \
+    echo "WITH_PYTHON_LAYER := 1" >> Makefile.config && \
     sed -i -e 's|/usr/lib/python2.7/dist-packages/numpy/core/include|/usr/local/lib/python2.7/dist-packages/numpy/core/include|' Makefile.config && \
 
     # Build Caffe core
