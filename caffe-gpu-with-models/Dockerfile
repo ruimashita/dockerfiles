@@ -1,4 +1,4 @@
-FROM ruimashita/caffe-gpu:rc3
+FROM quay.io/ruimashita/caffe-gpu:rc3
 
 # ignore sha1 download model script
 ADD download_model_binary_ignore_sha1.py scripts/download_model_binary_ignore_sha1.py
