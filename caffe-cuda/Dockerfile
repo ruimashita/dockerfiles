@@ -3,7 +3,7 @@ FROM ruimashita/cuda-scipy
 MAINTAINER takuya.wakisaka@moldweorp.com
 
 ENV PYTHONPATH /opt/caffe/python
-ENV PATH $PATH:/opt/caffe/.build_release/tools
+ENV PATH $PATH:/opt/caffe/build/tools
 ENV CAFFE_VERSION=master
 WORKDIR /opt/caffe
 
