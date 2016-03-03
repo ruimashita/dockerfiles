@@ -1,4 +1,4 @@
-FROM ruimashita/cuda-scipy
+FROM ruimashita/cudnn-scikit-learn-image
 
 MAINTAINER takuya.wakisaka@moldweorp.com
 
@@ -27,7 +27,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
   # for /opt/caffe/scripts/download_model_from_gist.sh
   unzip \
-  
+
   && apt-get clean \
   && rm -rf /var/lib/apt/lists/
 
@@ -49,13 +49,13 @@ RUN cd /opt && git clone https://github.com/BVLC/caffe.git && cd caffe && git ch
     make -j"$(nproc)" pycaffe && \
 
     # test
-    make -j"$(nproc)" test && \
+    make -j"$(nproc)" test
 
     # run test
     # make -j"$(nproc)" runtest && \
 
     # pytest
-    make -j"$(nproc)" pytest
+    # make -j"$(nproc)" pytest
 
 
 # for bug "libdc1394 error: Failed to initialize libdc1394"
