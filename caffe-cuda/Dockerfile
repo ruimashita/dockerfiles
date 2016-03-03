@@ -4,7 +4,7 @@ MAINTAINER takuya.wakisaka@moldweorp.com
 
 ENV PYTHONPATH /opt/caffe/python
 ENV PATH $PATH:/opt/caffe/build/tools
-ENV CAFFE_VERSION=master
+ENV CAFFE_VERSION=tags/rc3
 WORKDIR /opt/caffe
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
