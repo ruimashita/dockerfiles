@@ -36,13 +36,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && pip install --no-cache-dir scipy
 
 
-# install scikit-learn
-RUN pip install --no-cache-dir scikit-learn
-
-
-# install scikit-image
-RUN pip install --no-cache-dir scikit-image
-
-
-# install pandas
-RUN pip install --no-cache-dir pandas
+# install scikit-learn, scikit-image, pandas
+RUN pip install --no-cache-dir \
+    scikit-learn \
+    scikit-image \
+    pandas
