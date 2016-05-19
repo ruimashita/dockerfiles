@@ -27,6 +27,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   # for /opt/caffe/scripts/download_model_from_gist.sh
   unzip \
 
+  # for /opt/caffe/tools/extra/parse_log.sh
+  bsdmainutils \
+
   && apt-get clean \
   && rm -rf /var/lib/apt/lists/
 
