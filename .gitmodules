@@ -1,0 +1,3 @@
+[submodule "dec/dec"]
+	path = dec/dec
+	url = https://github.com/piiswrong/dec.git

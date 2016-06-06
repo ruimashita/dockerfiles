@@ -1,0 +1,14 @@
+version: '2'
+services:
+  dec:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    # working_dir: /home/docker
+    volumes:
+      - ./dec/dec:/opt/dec/dec/
+    devices:
+      - /dev/nvidia0:/dev/nvidia0
+      - /dev/nvidiactl:/dev/nvidiactl
+      - /dev/nvidia-uvm:/dev/nvidia-uvm
+
