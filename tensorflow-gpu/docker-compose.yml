@@ -10,8 +10,6 @@ services:
       - /usr/lib/x86_64-linux-gnu/libcuda.so:/usr/lib/x86_64-linux-gnu/libcuda.so
       - /usr/lib/x86_64-linux-gnu/libcuda.so.1:/usr/lib/x86_64-linux-gnu/libcuda.so.1
       - /usr/lib/x86_64-linux-gnu/libcuda.so.346.46:/usr/lib/x86_64-linux-gnu/libcuda.so.346.46
-    environment:
-      - PYTHONPATH=/home/docker/src
     ports:
       - "8888:8888"
       - "6006:6006"
@@ -19,4 +17,3 @@ services:
       - /dev/nvidia0:/dev/nvidia0
       - /dev/nvidiactl:/dev/nvidiactl
       - /dev/nvidia-uvm:/dev/nvidia-uvm
-
