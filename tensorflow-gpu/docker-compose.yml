@@ -6,6 +6,7 @@ services:
       dockerfile: Dockerfile
     # working_dir: /home/docker
     volumes:
+      - /usr/lib/cuda:/usr/lib/cuda
       - ./notebooks:/notebooks
       - /usr/lib/x86_64-linux-gnu/libcuda.so:/usr/lib/x86_64-linux-gnu/libcuda.so
       - /usr/lib/x86_64-linux-gnu/libcuda.so.1:/usr/lib/x86_64-linux-gnu/libcuda.so.1

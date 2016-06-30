@@ -1,4 +1,4 @@
-FROM ruimashita/cudnn-scikit-learn-image
+FROM ruimashita/cuda
 
 MAINTAINER takuya.wakisaka@moldweorp.com
 
@@ -9,9 +9,40 @@ EXPOSE 6006
 EXPOSE 8888
 
 ###
+# install cudnn
+###
+ENV CUDNN_VERSION 4
+RUN curl -fsSL http://developer.download.nvidia.com/compute/redist/cudnn/v4/cudnn-7.0-linux-x64-v4.0-prod.tgz -O && \
+    tar -xzf cudnn-7.0-linux-x64-v4.0-prod.tgz -C /usr/local && \
+    rm cudnn-7.0-linux-x64-v4.0-prod.tgz && \
+    ldconfig
+
+
+RUN echo "deb http://ftp.jaist.ac.jp/ubuntu/ trusty main restricted universe multiverse \n\
+deb-src http://ftp.jaist.ac.jp/ubuntu/ trusty main restricted universe multiverse \n\
+deb http://ftp.jaist.ac.jp/ubuntu/ trusty-updates main restricted universe multiverse \n\
+deb-src http://ftp.jaist.ac.jp/ubuntu/ trusty-updates main restricted universe multiverse \n\
+deb http://ftp.jaist.ac.jp/ubuntu/ trusty-backports main restricted universe multiverse \n\
+deb-src http://ftp.jaist.ac.jp/ubuntu/ trusty-backports main restricted universe multiverse \n\
+deb http://security.ubuntu.com/ubuntu trusty-security main restricted universe multiverse \n\
+deb-src http://security.ubuntu.com/ubuntu trusty-security main restricted universe multiverse" > /etc/apt/sources.list
+
+RUN apt-get update && apt-get install -y \
+    python \
+    python-dev \
+    python-pip \
+    python-numpy \
+    python-scipy \
+    python-scikits-learn \
+    && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+
+###
 # install jupyter
 ###
-RUN pip --no-cache-dir install \
+RUN pip  install \
         ipykernel \
         jupyter \
         matplotlib \
@@ -26,14 +57,6 @@ COPY jupyter_notebook_config.py /root/.jupyter/
 # We just add a little wrapper script.
 COPY run_jupyter.sh /
 
-RUN echo "deb http://ftp.jaist.ac.jp/ubuntu/ trusty main restricted universe multiverse \n\
-deb-src http://ftp.jaist.ac.jp/ubuntu/ trusty main restricted universe multiverse \n\
-deb http://ftp.jaist.ac.jp/ubuntu/ trusty-updates main restricted universe multiverse \n\
-deb-src http://ftp.jaist.ac.jp/ubuntu/ trusty-updates main restricted universe multiverse \n\
-deb http://ftp.jaist.ac.jp/ubuntu/ trusty-backports main restricted universe multiverse \n\
-deb-src http://ftp.jaist.ac.jp/ubuntu/ trusty-backports main restricted universe multiverse \n\
-deb http://security.ubuntu.com/ubuntu trusty-security main restricted universe multiverse \n\
-deb-src http://security.ubuntu.com/ubuntu trusty-security main restricted universe multiverse" > /etc/apt/sources.list
 
 RUN apt-get update && apt-get install -y \
     software-properties-common \
@@ -57,7 +80,7 @@ RUN echo "deb http://storage.googleapis.com/bazel-apt stable jdk1.8" | sudo tee 
 RUN curl https://storage.googleapis.com/bazel-apt/doc/apt-key.pub.gpg | sudo apt-key add -
 RUN sudo apt-get update && sudo apt-get install -y bazel
 
-ENV TENSORFLOW_VERSION r0.8
+ENV TENSORFLOW_VERSION r0.9
 
 # Download and build TensorFlow.
 RUN git clone --recursive https://github.com/tensorflow/tensorflow.git && \
@@ -66,15 +89,6 @@ RUN git clone --recursive https://github.com/tensorflow/tensorflow.git && \
     git submodule update --init
 
 WORKDIR /tensorflow
-
-RUN pip uninstall -y numpy scipy
-
-RUN apt-get update && apt-get install -y \
-    python-numpy \
-    python-scipy \
-    && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
 
 # Configure the build for our CUDA configuration.
 ENV CUDA_TOOLKIT_PATH /usr/local/cuda
@@ -91,12 +105,14 @@ ENV BAZELRC /root/.bazelrc
 #     bazel build -c opt //tensorflow/tools/pip_package:build_pip_package && \
 #     bazel build -c opt --config=cuda //tensorflow/tools/pip_package:build_pip_package
 
+
 RUN ./configure && \
     bazel build --config=cuda //tensorflow/tools/pip_package:build_pip_package
 
-RUN cp -r bazel-bin/tensorflow/tools/pip_package/build_pip_package.runfiles/__main__/* bazel-bin/tensorflow/tools/pip_package/build_pip_package.runfiles/ && \
-    bazel-bin/tensorflow/tools/pip_package/build_pip_package /tmp/pip && \
+
+RUN bazel-bin/tensorflow/tools/pip_package/build_pip_package /tmp/pip && \
     pip install --upgrade /tmp/pip/tensorflow-*.whl
+
 
 # # RUN mkdir _python_build  && \
 # #     cd _python_build  && \
@@ -124,6 +140,9 @@ RUN bazel build --config=cuda //tensorflow/... && \
 ENV CUDA_PATH /usr/local/cuda
 
 
+RUN bazel build --config=cuda //tensorflow/g3doc/how_tos/adding_an_op:cuda_op_kernel.so
+
+
 ### user ops
 ENV LD_LIBRARY_PATH $LD_LIBRARY_PATH:/tensorflow/bazel-bin/tensorflow/core/user_ops/
 COPY tensorflow/core/user_ops/BUILD /tensorflow/tensorflow/core/user_ops/BUILD
@@ -144,20 +163,16 @@ COPY tensorflow/core/user_ops/my_pad.cc /tensorflow/tensorflow/core/user_ops/my_
 # RUN bazel build -c opt //tensorflow/core/user_ops:my_pad.so
 # RUN bazel build -c opt --verbose_failures //tensorflow/core/user_ops:my_pad.so
 
+COPY tensorflow/core/user_ops/__init__.py /tensorflow/tensorflow/core/user_ops/__init__.py
 COPY tensorflow/core/user_ops/my_pad_op.py /tensorflow/tensorflow/core/user_ops/my_pad_op.py
 COPY tensorflow/core/user_ops/my_pad_op_test.py /tensorflow/tensorflow/core/user_ops/my_pad_op_test.py
-# RUN bazel test  -j $(nproc) --test_output=all //tensorflow/core/user_ops:my_pad_op_test
-
-# RUN ls
-
-# RUN bazel build -c opt --config=cuda //google/protobuf:protoc_lib
-# RUN bazel build -c opt --config=cuda //google/protobuf:protobuf_lite
-# RUN bazel build -c opt --config=cuda //third_party/gpus/cuda:cudart_static
-# RUN bazel build -c opt --config=cuda //google/protobuf
-# RUN bazel build -c opt --config=cuda //third_party/gpus/cuda:cudart_static
 COPY tensorflow/core/user_ops/my_pad.cu.cc /tensorflow/tensorflow/core/user_ops/my_pad.cu.cc
+COPY tensorflow/core/user_ops/my_pad.h /tensorflow/tensorflow/core/user_ops/my_pad.h
+# RUN bazel build --verbose_failures //tensorflow/core/user_ops:my_pad.so
+RUN bazel build --config=cuda --verbose_failures //tensorflow/core/user_ops:my_pad.so
+# RUN bazel build -c dbg --config=cuda --verbose_failures //tensorflow/core/user_ops:my_pad.so
 
-
+# RUN bazel test  -j $(nproc) --test_output=all //tensorflow/core/user_ops:my_pad_op_test
 # RUN bazel build -c opt --config=cuda --verbose_failures //tensorflow/core/user_ops:my_pad.so
 # RUN bazel test --config=cuda  -j $(nproc) --test_output=all //tensorflow/core/user_ops:my_pad_op_test
 
@@ -166,7 +181,7 @@ COPY tensorflow/core/user_ops/my_pad.cu.cc /tensorflow/tensorflow/core/user_ops/
 # RUN bazel-bin/tensorflow/cc/tutorials_example_trainer --use_gpu
 
 
-RUN bazel build -c dbg --config=cuda //tensorflow/core/user_ops:my_pad.so
+# RUN bazel build -c dbg --config=cuda //tensorflow/core/user_ops:my_pad.so
 
 # RUN bazel build -c dbg --strip=never --config=cuda //tensorflow/tools/pip_package:build_pip_package
 
@@ -176,9 +191,21 @@ RUN bazel build -c dbg --config=cuda //tensorflow/core/user_ops:my_pad.so
 
 
 
-RUN bazel build --config=cuda //tensorflow/g3doc/how_tos/adding_an_op:cuda_op_kernel.so
+# RUN bazel build --config=cuda //tensorflow/g3doc/how_tos/adding_an_op:cuda_op_kernel.so
 
-RUN bazel test -j $(nproc) --config=cuda //tensorflow/g3doc/how_tos/adding_an_op:cuda_op_test
+# RUN bazel test -j $(nproc) --verbose_failures --stamp --config=cuda //tensorflow/g3doc/how_tos/adding_an_op:cuda_op_test
+
+
+# RUN bazel build --config=cuda --verbose_failures //tensorflow/core/user_ops:my_pad.so
+
+
+
+# for my_cuda_op
+# COPY tensorflow/core/user_ops/my_cuda_op_kernel.cc /tensorflow/tensorflow/core/user_ops/my_cuda_op_kernel.cc
+# COPY tensorflow/core/user_ops/my_cuda_op_kernel.cu.cc /tensorflow/tensorflow/core/user_ops/my_cuda_op_kernel.cu.cc
+# RUN bazel build --config=cuda //tensorflow/core/user_ops:my_cuda_op_kernel.so
+
+
 
 
 WORKDIR "/notebooks"
