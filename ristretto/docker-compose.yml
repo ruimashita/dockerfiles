@@ -1,0 +1,15 @@
+version: '2'
+services:
+  ristretto:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/home/docker
+      - /usr/lib/x86_64-linux-gnu/libcuda.so:/usr/lib/x86_64-linux-gnu/libcuda.so
+      - /usr/lib/x86_64-linux-gnu/libcuda.so.1:/usr/lib/x86_64-linux-gnu/libcuda.so.1
+      - /usr/lib/x86_64-linux-gnu/libcuda.so.346.46:/usr/lib/x86_64-linux-gnu/libcuda.so.346.46
+    devices:
+      - /dev/nvidia0:/dev/nvidia0
+      - /dev/nvidiactl:/dev/nvidiactl
+      - /dev/nvidia-uvm:/dev/nvidia-uvm
