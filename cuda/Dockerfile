@@ -4,7 +4,7 @@ MAINTAINER takuya.wakisaka@moldweorp.com
 
 ENV PATH=/usr/local/cuda/bin:$PATH
 ENV LD_LIBRARY_PATH=/usr/local/cuda/lib64:$LD_LIBRARY_PATH
-ENV CUDA_RUNFILE_URL=http://developer.download.nvidia.com/compute/cuda/7.5/Prod/local_installers/cuda_7.5.18_linux.run
+ENV CUDA_RUNFILE_URL=http://developer.download.nvidia.com/compute/cuda/7.0/Prod/local_installers/cuda_7.0.28_linux.run
 
 
 # faster apt source
