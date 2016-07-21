@@ -31,7 +31,7 @@ RUN cd /tmp && \
 
 # Install nvidia drivers (silent, no kernel)
 RUN cd /tmp && \
-    axel http://us.download.nvidia.com/XFree86/Linux-x86_64/352.93/NVIDIA-Linux-x86_64-352.93.run  && \
+    axel http://us.download.nvidia.com/XFree86/Linux-x86_64/367.35/NVIDIA-Linux-x86_64-367.35.run  && \
     chmod +x  ./NVIDIA-Linux-x86_64-*.run && \
     ./NVIDIA-Linux-x86_64-*.run -s --no-kernel-module && \
     rm -rf *
