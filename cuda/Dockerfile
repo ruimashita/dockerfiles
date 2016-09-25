@@ -4,7 +4,7 @@ MAINTAINER takuya.wakisaka@moldweorp.com
 
 ENV PATH=/usr/local/cuda/bin:$PATH
 ENV LD_LIBRARY_PATH=/usr/local/cuda/lib64:$LD_LIBRARY_PATH
-ENV CUDA_RUNFILE_URL=http://developer.download.nvidia.com/compute/cuda/7.0/Prod/local_installers/cuda_7.0.28_linux.run
+ENV CUDA_RUNFILE_URL=http://developer.download.nvidia.com/compute/cuda/7_0/Prod/local_installers/cuda_7.0.28_linux.run
 
 
 # faster apt source
@@ -30,8 +30,8 @@ RUN cd /tmp && \
     rm -rf *
 
 # Install nvidia drivers (silent, no kernel)
-RUN cd /tmp && \
-    axel http://us.download.nvidia.com/XFree86/Linux-x86_64/367.35/NVIDIA-Linux-x86_64-367.35.run  && \
-    chmod +x  ./NVIDIA-Linux-x86_64-*.run && \
-    ./NVIDIA-Linux-x86_64-*.run -s --no-kernel-module && \
-    rm -rf *
+# RUN cd /tmp && \
+#     axel http://us.download.nvidia.com/XFree86/Linux-x86_64/367.35/NVIDIA-Linux-x86_64-367.35.run  && \
+#     chmod +x  ./NVIDIA-Linux-x86_64-*.run && \
+#     ./NVIDIA-Linux-x86_64-*.run -s --no-kernel-module && \
+#     rm -rf *
